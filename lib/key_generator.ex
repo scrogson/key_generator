@@ -1,0 +1,2 @@
+defmodule KeyGenerator do
+end
