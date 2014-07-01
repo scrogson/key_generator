@@ -7,6 +7,10 @@ KeyGenerator is a [PBKDF2][] implementation for [Elixir][]. Conforming to [rfc28
 [Elixir]: http://elixir-lang.org
 [rfc2898]: http://tools.ietf.org/html/rfc2898
 
+It can be used to derive a number of keys for various purposes from a given
+secret. This lets applications have a single secure secret, but avoid reusing
+that key in multiple incompatible contexts.
+
 ## Usage
 
 ```elixir
@@ -22,8 +26,9 @@ key = User.encrypt_password("password", "salt")
 # => "f87cbb89d972a9b96f5a9e2068308f06e1cf6421748..."
 ```
 
-The available options are:
+### Options
 
-* `:iterations` - defaults to 1000.
-* `:length` - derived key length. Defaults to 64.
-* `:digest` - The `hmac` function to perform. Defaults to `:sha`.
+* `:iterations` - defaults to 1000;
+* `:length`     - a length in octets for the derived key. Defaults to 64;
+* `:digest`     - an hmac function to use as the pseudo-random function.
+                  Defaults to `:sha`;
