@@ -11,10 +11,19 @@ KeyGenerator is a [PBKDF2][] implementation for [Elixir][]. Conforming to [rfc28
 
 ```elixir
 defmodule User do
+  import KeyGenerator
+
   def encrypt_password(password, salt, opts \\ []) do
-    KeyGenerator.generate_key(password, salt, opts)
+    generate(password, salt, opts) |> to_hex
   end
 end
-{:ok, key} = User.encrypt_password("password", "salt", iterations: 4096, length:
-20)
+
+key = User.encrypt_password("password", "salt")
+# => "f87cbb89d972a9b96f5a9e2068308f06e1cf6421748..."
 ```
+
+The available options are:
+
+* `:iterations` - defaults to 1000.
+* `:length` - derived key length. Defaults to 64.
+* `:digest` - The `hmac` function to perform. Defaults to `:sha`.
