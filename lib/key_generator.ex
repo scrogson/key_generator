@@ -38,7 +38,7 @@ defmodule KeyGenerator do
     case IO.iodata_length(acc) > length do
       true ->
         key = acc |> Enum.reverse |> IO.iodata_to_binary
-        <<bin::[binary, size(length)], _::[binary]>> = key
+        <<bin::binary-size(length), _::binary>> = key
         bin
       false ->
         block = generate(fun, secret, salt, opts, block_index, 1, "", "")
@@ -50,7 +50,7 @@ defmodule KeyGenerator do
     when iteration > iterations, do: acc
 
   defp generate(fun, secret, salt, opts, block_index, 1, _prev, _acc) do
-    initial = fun.(secret, <<salt::[binary], block_index::[integer, size(32)]>>)
+    initial = fun.(secret, <<salt::binary, block_index::integer-size(32)>>)
     generate(fun, secret, salt, opts, block_index, 2, initial, initial)
   end
 
@@ -66,11 +66,11 @@ defmodule KeyGenerator do
   end
 
   def to_hex(<<>>), do: <<>> 
-  def to_hex(<<char::[integer, size(8)], rest::[binary]>>) do
+  def to_hex(<<char::integer-size(8), rest::binary>>) do
     hex1 = char |> div(16) |> to_hex_digit
     hex2 = char |> rem(16) |> to_hex_digit
     rest = to_hex(rest)
-    <<hex1, hex2, rest::[binary]>>
+    <<hex1, hex2, rest::binary>>
   end
 
   defp to_hex_digit(n) when n < 10, do: ?0 + n
